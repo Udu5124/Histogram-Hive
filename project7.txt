@@ -1,0 +1,39 @@
+Login into Comet and download and untar project7:
+
+wget http://lambda.uta.edu/cse6331/project7.tgz
+tar xfz project7.tgz
+chmod -R g-wrx,o-wrx project7
+You need to create an empty metastore database first (this must be done only once):
+cd
+rm -rf metastore_db  warehouse
+export HIVE_HOME=/oasis/projects/nsf/uot143/fegaras/apache-hive-2.1.0-bin
+export JAVA_HOME=/lib/jvm/java
+export HADOOP_CONF_DIR=$HOME/cometcluster
+module load hadoop/2.6.0
+$HIVE_HOME/bin/schematool -dbType derby -initSchema
+Go to project7/example and look at the join.hql example. You can run it in local mode using:
+sbatch join.local.run
+
+Use your laptop to develop your project
+If you'd prefer, you may use your laptop to develop your program and then test it and run it on Comet.
+
+To install Hive and the project:
+
+cd
+wget https://downloads.apache.org/hive/stable-2/apache-hive-2.3.7-bin.tar.gz
+tar xfz apache-hive-2.3.7-bin.tar.gz
+wget http://lambda.uta.edu/cse6331/project7.tgz
+tar xfz project7.tgz
+Every time you login, you need to execute these:
+export HIVE_HOME=$HOME/apache-hive-2.3.7-bin
+export HADOOP_HOME=$HOME/hadoop-2.6.5
+export PATH=$HIVE_HOME/bin:$PATH
+export HIVE_OPTS="--hiveconf mapreduce.framework.name=local --hiveconf fs.default.name=file://$HOME --hiveconf hive.metastore.warehouse.dir=file://$HOME/warehouse --hiveconf javax.jdo.option.ConnectionURL=jdbc:derby:;databaseName=/$HOME/metastore_db;create=true"
+You also need to create an empty metastore database first (this must be done only once):
+cd
+rm -rf metastore_db  warehouse
+schematool -dbType derby -initSchema
+Then, to evaluate Hive commands interactively, do:
+hive
+Go to project7/example and look at the join.hql example. You can run it in local mode (after you setup your PATH) using:
+hive -f join.hql
